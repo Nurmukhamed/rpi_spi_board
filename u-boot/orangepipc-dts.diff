@@ -1,0 +1,46 @@
+--- ./o/u-boot/arch/arm/dts/sun8i-h3-orangepi-pc.dts  2019-12-09 14:16:34.638633856 +0300
++++ ./n/u-boot/arch/arm/dts/sun8i-h3-orangepi-pc.dts  2019-10-09 20:19:42.792490685 +0300
+@@ -54,6 +54,7 @@
+   aliases {
+     ethernet0 = &emac;
+     serial0 = &uart0;
++                spi0 = &spi0;
+   };
+ 
+   chosen {
+@@ -140,6 +141,35 @@
+   status = "okay";
+ };
+ 
++&spi0 {
++        status = "okay";
++
++        flash@0 {
++                #address-cells = <1>;
++                #size-cells = <1>;
++                compatible = "mxicy,mx25l1606e", "winbond,w25q128";
++                reg = <0>;
++                spi-max-frequency = <40000000>;
++                partitions {
++                        compatible = "fixed-partitions";
++                        #address-cells = <1>;
++                        #size-cells = <1>;
++
++                        qspi_boot: partition@0 {
++                                label = "Boot and fpga data";
++                                reg = <0x0 0x4000000>;
++                        };
++
++                        qspi_rootfs: partition@4000000 {
++                                label = "Root Filesystem - JFFS2";
++                                reg = <0x4000000 0x4000000>;
++                        };
++                };
++        };
++};
++
++
++
+ &hdmi {
+   status = "okay";
+ };
